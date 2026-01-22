@@ -16,20 +16,15 @@ async function testAllAPIs() {
     console.log('❌ Helius API 连接失败:', e.message);
   }
 
-  // 2. 测试 Birdeye
+  // 2. 测试 DexScreener API (免费，无需API Key，更稳定)
   try {
-    const birdeyeRes = await axios.get(
-      'https://public-api.birdeye.so/defi/price?address=So11111111111111111111111111111111111111112',
-      {
-        headers: {
-          'X-API-KEY': process.env.BIRDEYE_API_KEY,
-          'x-chain': 'solana'
-        }
-      }
+    const dexRes = await axios.get(
+      'https://api.dexscreener.com/latest/dex/tokens/So11111111111111111111111111111111111111112'
     );
-    console.log('✅ Birdeye API 连接成功, SOL价格:', birdeyeRes.data.data.value);
+    const solPrice = dexRes.data.pairs?.[0]?.priceUsd;
+    console.log('✅ DexScreener API 连接成功, SOL价格: $' + solPrice);
   } catch (e: any) {
-    console.log('❌ Birdeye API 连接失败:', e.message);
+    console.log('❌ DexScreener API 连接失败:', e.message);
   }
 
   // 3. 测试 Moralis
